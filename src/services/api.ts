@@ -20,8 +20,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
           console.log('Response data:', response.data);
           res.status(200).json(response.data);
-     } catch (error: any) {
-          console.error('Error fetching tweets:', error.response?.data || error.message);
+     } catch (error: unknown) {
+          if (error instanceof Error) {
+               console.error('Error fetching tweets:', error.message);
+          } else {
+               console.error('Unexpected error:', error);
+          }
           res.status(500).json({ error: 'Failed to fetch tweets' });
      }
 
